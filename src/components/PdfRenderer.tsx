@@ -33,6 +33,8 @@ const PdfRenderer = ({url}: PdfRendererProps) => {
     const [currPage, setCurrPage] = useState<number>(1);
     const [scale, setScale] = useState<number>(1);
     const [rotation, setRotation] = useState<number>(0);
+    const [renderedScale, setRenderedScale] = useState<number | null>(null);
+    const isLoading = renderedScale !== scale;
 
     const CustomPageValidator = z.object({
         page: z.string().refine((num) => Number(num) > 0 && Number(num) <= numPages!)
@@ -91,7 +93,10 @@ const PdfRenderer = ({url}: PdfRendererProps) => {
                     
                     <Button 
                         disabled={ numPages === undefined || currPage === numPages }
-                        onClick={() => setCurrPage((prev) => prev + 1 > numPages! ? numPages! : prev + 1)}
+                        onClick={() => {
+                            setCurrPage((prev) => prev + 1 > numPages! ? numPages! : prev + 1);
+                            setValue("page", String(currPage + 1));
+                        }}
                         aria-label="next page" 
                         variant="ghost" >
                         <ChevronUp className="h-4 w-4" />
@@ -155,11 +160,27 @@ const PdfRenderer = ({url}: PdfRendererProps) => {
                         onLoadSuccess={({ numPages }) => setNumPages(numPages)}
                         file={url}
                         className="max-h-full">
-                        <Page 
-                            width={width ? width : 1 } 
-                            pageNumber={currPage} 
-                            rotate={rotation}
-                            scale={scale} />
+                        { isLoading && renderedScale ? (
+                             <Page 
+                                key={"@" + renderedScale}
+                                width={width ? width : 1 } 
+                                pageNumber={currPage} 
+                                rotate={rotation}
+                                scale={scale} />
+                        ) : null }
+                             <Page 
+                                key={"@" + scale}
+                                className={cn(isLoading ? "hidden" : "")}
+                                loading = {
+                                    <div className="flex justify-center">
+                                        <Loader2 className="my-24 h-6 w-6 animate-spin" />
+                                    </div>
+                                }
+                                onRenderSuccess={() => setRenderedScale(scale)}
+                                width={width ? width : 1 } 
+                                pageNumber={currPage} 
+                                rotate={rotation}
+                                scale={scale} />
                     </Document>
                 </div>
                 </SimpleBar> 
