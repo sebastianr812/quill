@@ -177,7 +177,6 @@ export const ChatContextProvider = ({fileId, children} : Props) => {
                     }
                );
             }
-
         },
         onError: (_, __, context) => {
             setMessage(backupMessage.current);

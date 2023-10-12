@@ -1,5 +1,5 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import {SendMessageValidator} from "@/lib/validators/sendMessageValidator";
 import { db } from "@/db";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
@@ -17,7 +17,7 @@ export async function POST (req: NextRequest) {
     const {id: userId} = user;
 
     if (!userId) {
-        return new NextResponse("unauthorized", {status: 401});
+        return new Response("unauthorized", {status: 401});
     }
     
     const {
@@ -33,7 +33,7 @@ export async function POST (req: NextRequest) {
     });
 
     if (!file) {
-        return new NextResponse("file not found", {status: 404});
+        return new Response("file not found", {status: 404});
     }
 
     await db.message.create({
@@ -71,7 +71,7 @@ export async function POST (req: NextRequest) {
     });
 
     const formattedPrevMessages = prevMessages.map((message) => ({
-        role: message.isUserMessage ? "user" as const : "assistant" as const,
+        role: message.isUserMessage ? ("user" as const) : ("assistant" as const),
         content: message.text
     }));
 
