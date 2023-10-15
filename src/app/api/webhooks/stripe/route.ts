@@ -1,4 +1,4 @@
-import {NextRequest, NextResponse} from "next/server";
+import {NextRequest} from "next/server";
 import {headers} from "next/headers";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
@@ -17,7 +17,7 @@ export async function POST (req: NextRequest) {
             process.env.STRIPE_WEBHOOK_SECRET || ""
         );
     } catch (e) {
-        return new NextResponse(
+        return new Response(
             `webhook error: ${e instanceof Error ? e.message: "unknown error"}`,
             {status: 500}
         );
@@ -26,7 +26,7 @@ export async function POST (req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     if (!session?.metadata?.userId) {
-        return new NextResponse(null, {status: 200});
+        return new Response(null, {status: 200});
     }
 
     if (event.type === "checkout.session.completed") {
@@ -61,5 +61,5 @@ export async function POST (req: NextRequest) {
         });
     }
     
-    return new NextResponse(null, {status: 200});
+    return new Response(null, {status: 200});
 }
