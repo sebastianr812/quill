@@ -39,7 +39,6 @@ const Navbar = async () => {
                                 })}>
                                 Sign in
                             </Link>
-                            <Link href="/sign-up">SIGN UP</Link>
                             <Link
                                 href="/sign-up"
                                 className={buttonVariants({
