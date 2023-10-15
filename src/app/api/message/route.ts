@@ -1,4 +1,3 @@
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { NextRequest } from "next/server";
 import {SendMessageValidator} from "@/lib/validators/sendMessageValidator";
 import { db } from "@/db";
@@ -7,14 +6,13 @@ import { getPineconeClient } from "@/lib/pinecone";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { openai } from "@/lib/openai";
 import {OpenAIStream, StreamingTextResponse} from "ai";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST (req: NextRequest) {
     // endpoint for asking question for a PDF
     
     const body = await req.json();
-    const {getUser} = getKindeServerSession();
-    const user = getUser();
-    const {id: userId} = user;
+    const {userId} = auth();
 
     if (!userId) {
         return new Response("unauthorized", {status: 401});

@@ -1,7 +1,7 @@
 import ChatWrapper from "@/components/chat/ChatWrapper";
 import PdfRenderer from "@/components/PdfRenderer";
 import { db } from "@/db";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { notFound, redirect } from "next/navigation";
 
 interface FileIdPageProps {
@@ -12,17 +12,16 @@ interface FileIdPageProps {
 
 const FileIdPage = async ({params} : FileIdPageProps) => {
     const {fileId} = params;
-    const {getUser} = getKindeServerSession();
-    const user = getUser();
+    const {userId} = auth();
 
-    if (!user || !user.id) {
+    if (!userId) {
         redirect(`/auth-callback?origin=dashboard/${fileId}`);
     }
 
     const file = await db.file.findFirst({
         where: {
             id: fileId,
-            userId: user.id
+            userId        
         }
     });
 

@@ -1,9 +1,12 @@
 'use client';
 
+import { useClerk } from "@clerk/nextjs";
 import { ArrowRight, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import LogoutButton from "./LogoutButton";
+import { Button } from "./ui/button";
 
 interface MobileNavProps {
     isAuth: boolean;
@@ -13,6 +16,7 @@ const MobileNav = ({isAuth} : MobileNavProps) => {
     
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const toggleOpen = () => setIsOpen((prev) => !prev);
+    const {signOut} = useClerk();
 
     const pathname = usePathname();
 
@@ -77,12 +81,7 @@ const MobileNav = ({isAuth} : MobileNavProps) => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link
-                                            className="flex items-center w-full font-semibold"
-                                            href="/sign-out">
-                                            Sign out
-                                            <ArrowRight className="ml-2 h-5 w-5" />
-                                        </Link>
+                                    <LogoutButton />
                                     </li>
                                 </>
                             )}

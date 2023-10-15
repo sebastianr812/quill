@@ -6,6 +6,7 @@ import { cn, constructMetadata } from '@/lib/utils'
 import Navbar from '@/components/Navbar'
 import Providers from '@/components/Providers'
 import { Toaster } from '@/components/ui/toaster'
+import {ClerkProvider} from '@clerk/nextjs';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,6 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    <ClerkProvider>
     <html lang="en" className='light'>
         <Providers>      
             <body 
@@ -28,5 +30,6 @@ export default function RootLayout({
             </body>
         </Providers>
     </html>
+    </ClerkProvider>
   )
 }

@@ -1,16 +1,15 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import {getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server";
 import {PLANS} from "@/config/stripe";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import UpgradeButton from "@/components/UpgradeButton";
+import {currentUser } from "@clerk/nextjs/server";
 
-const PricingPage =  () => {
-    const {getUser} = getKindeServerSession();
-    const user = getUser();
+const PricingPage =  async () => {
+    const user = await currentUser();
 
     const pricingItems = [
     {
@@ -159,7 +158,7 @@ const PricingPage =  () => {
                                     <div className="border-t border-gray-200"  />                                
                                     <div className="p-5">
                                         {plan === "Free" ? (
-                                            <Link href={user ? "/dashboard" : "sign-in"} className={buttonVariants({
+                                            <Link href={user ? "/dashboard" : "/sign-in"} className={buttonVariants({
                                                 className: "w-full",
                                                 variant: "secondary"
                                             })}>

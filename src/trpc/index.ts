@@ -1,4 +1,3 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { privateProcedure, publicProcedure, router } from './trpc';
 import { TRPCError } from '@trpc/server';
 import { db } from '@/db';
@@ -7,13 +6,14 @@ import { INFINITE_QUERY_LIMIT } from '@/config/infinite-query';
 import { absoluteUrl } from '@/lib/utils';
 import { getUserSubscriptionPlan, stripe } from '@/lib/stripe';
 import { PLANS } from '@/config/stripe';
+import {  currentUser } from '@clerk/nextjs/server';
  
 export const appRouter = router({
     authCallback: publicProcedure.query( async () => {
-        const {getUser} = getKindeServerSession();
-        const user = getUser();
+        const user = await currentUser();
+        console.log("USER", user);
 
-        if (!user.id || !user.email) {
+        if (!user || !user.id ) {
             throw new TRPCError({ code: "UNAUTHORIZED" });
         }
 
@@ -29,18 +29,21 @@ export const appRouter = router({
             await db.user.create({
                 data: {
                     id: user.id,
-                    email: user.email
+                    email: user.emailAddresses[0].emailAddress 
                 }
             });
         }
         return { success: true };
     }),
     getUserFiles: privateProcedure.query( async ({ctx}) => {
-        const {user, userId} = ctx;
+        const {userId} = ctx;
         
         return await db.file.findMany({
             where: {
                 userId
+            },
+            include: {
+                messages: true
             }
         });
     }),

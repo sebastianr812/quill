@@ -1,15 +1,14 @@
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
-import {LoginLink, RegisterLink, getKindeServerSession} from "@kinde-oss/kinde-auth-nextjs/server";
 import { ArrowRight } from 'lucide-react';
 import UserAccountNav from './UserAccountNav';
 import MobileNav from './MobileNav';
+import {currentUser } from '@clerk/nextjs/server';
 
-const Navbar = () => {
+const Navbar = async () => {
 
-    const {getUser} = getKindeServerSession();
-    const user = getUser();
+    const user = await currentUser();
 
     return (
         <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -32,19 +31,22 @@ const Navbar = () => {
                                 })}>
                                Pricing 
                             </Link>
-                            <LoginLink
+                            <Link
+                                href="/sign-in"
                                 className={buttonVariants({
                                     variant: "ghost",
                                     size: "sm"
                                 })}>
                                 Sign in
-                            </LoginLink>
-                            <RegisterLink
+                            </Link>
+                            <Link href="/sign-up">SIGN UP</Link>
+                            <Link
+                                href="/sign-up"
                                 className={buttonVariants({
                                     size: "sm"
                                 })}>
                             Get started <ArrowRight className='ml-1.5 h-5 w-5'/>
-                            </RegisterLink>
+                            </Link>
                             </>
                         ): (
                             <>
@@ -57,9 +59,9 @@ const Navbar = () => {
                                 Dashboard
                             </Link>
                             <UserAccountNav 
-                                name={!user.given_name || !user.family_name ? "Your Account": `${user.given_name} ${user.family_name}`}
-                                email={user.email ?? ""}
-                                imageUrl={user.picture ?? ""} />
+                                name={!user.firstName || !user.lastName ? "Your Account": `${user.firstName} ${user.lastName}`}
+                                email={user.emailAddresses[0].emailAddress  ?? ""}
+                                imageUrl={user.imageUrl ?? ""} />
                             </>
                         )}
                     </div>

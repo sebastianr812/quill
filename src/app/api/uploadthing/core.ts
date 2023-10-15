@@ -1,5 +1,4 @@
 import { db } from "@/db";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import {PDFLoader} from "langchain/document_loaders/fs/pdf";
 import {  getPineconeClient } from "@/lib/pinecone";
@@ -7,18 +6,18 @@ import {OpenAIEmbeddings} from "langchain/embeddings/openai";
 import {PineconeStore} from "langchain/vectorstores/pinecone";
 import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { PLANS } from "@/config/stripe";
+import { auth } from "@clerk/nextjs/server";
  
 const f = createUploadthing();
 
 const middleware = async () => {
-    const {getUser} = getKindeServerSession();
-    const user = getUser();
+    const {userId} = auth();
 
-    if (!user || !user.id) throw new Error("Unauthorized");
+    if (!userId) throw new Error("Unauthorized");
 
     const subscriptionPlan = await getUserSubscriptionPlan();
  
-    return {subscriptionPlan, userId: user.id};
+    return {subscriptionPlan, userId};
 }
 
 const onUploadComplete = async ({
