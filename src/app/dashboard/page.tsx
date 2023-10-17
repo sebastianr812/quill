@@ -2,7 +2,7 @@ import { db } from '@/db';
 import { redirect } from 'next/navigation';
 import Dashboard from '@/components/Dashboard';
 import { getUserSubscriptionPlan } from '@/lib/stripe';
-import { auth } from '@clerk/nextjs/server';
+import { auth } from '@clerk/nextjs';
 
 const DashboardPage = async () => {
    const {userId} = auth();

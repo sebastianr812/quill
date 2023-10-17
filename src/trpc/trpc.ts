@@ -1,4 +1,4 @@
-import {auth, currentUser } from '@clerk/nextjs/server';
+import {auth, currentUser } from '@clerk/nextjs';
 import { TRPCError, initTRPC } from '@trpc/server';
  
 /**

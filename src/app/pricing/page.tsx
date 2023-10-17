@@ -6,7 +6,7 @@ import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import UpgradeButton from "@/components/UpgradeButton";
-import {currentUser } from "@clerk/nextjs/server";
+import {currentUser } from "@clerk/nextjs";
 
 const PricingPage =  async () => {
     const user = await currentUser();

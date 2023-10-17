@@ -6,7 +6,7 @@ import {OpenAIEmbeddings} from "langchain/embeddings/openai";
 import {PineconeStore} from "langchain/vectorstores/pinecone";
 import { getUserSubscriptionPlan } from "@/lib/stripe";
 import { PLANS } from "@/config/stripe";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
  
 const f = createUploadthing();
 

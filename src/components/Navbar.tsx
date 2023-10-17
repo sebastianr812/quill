@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import UserAccountNav from './UserAccountNav';
 import MobileNav from './MobileNav';
-import {currentUser } from '@clerk/nextjs/server';
+import {currentUser } from '@clerk/nextjs';
 
 const Navbar = async () => {
 

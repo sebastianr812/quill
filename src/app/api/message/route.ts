@@ -6,7 +6,7 @@ import { getPineconeClient } from "@/lib/pinecone";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { openai } from "@/lib/openai";
 import {OpenAIStream, StreamingTextResponse} from "ai";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
 
 export async function POST (req: NextRequest) {
     // endpoint for asking question for a PDF

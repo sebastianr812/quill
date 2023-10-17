@@ -1,6 +1,6 @@
 import {PLANS} from "@/config/stripe";
 import {db} from "@/db";
-import {auth} from "@clerk/nextjs/server";
+import {auth} from "@clerk/nextjs";
 import Stripe from "stripe";
 
 export const stripe = new Stripe(
