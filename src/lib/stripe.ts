@@ -1,6 +1,6 @@
 import {PLANS} from "@/config/stripe";
 import {db} from "@/db";
-import {currentUser } from "@clerk/nextjs/server";
+import {auth} from "@clerk/nextjs/server";
 import Stripe from "stripe";
 
 export const stripe = new Stripe(
@@ -12,9 +12,9 @@ export const stripe = new Stripe(
 );
 
 export async function getUserSubscriptionPlan() {
-    const user = await currentUser();
+    const {userId} = auth();
 
-  if (!user || !user.id) {
+  if (!userId) {
     return {
       ...PLANS[0],
       isSubscribed: false,
@@ -25,7 +25,7 @@ export async function getUserSubscriptionPlan() {
 
   const dbUser = await db.user.findFirst({
     where: {
-      id: user.id,
+      id: userId
     },
   })
 
