@@ -6,6 +6,7 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({
     publicRoutes: [
         "/",
+        "/dashboard/billing",
         "/api/auth/register",
         "/api/auth/favicon.ico",
         "/auth-callback",
