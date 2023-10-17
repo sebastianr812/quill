@@ -9,7 +9,8 @@ export default authMiddleware({
         "/api/auth/register",
         "/api/auth/favicon.ico",
         "/auth-callback",
-        "/api/uploadthing"
+        "/api/uploadthing",
+        "/api/webhooks/stripe"
     ]
 });
  
