@@ -26,7 +26,7 @@ export async function POST (req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     if (!session?.metadata?.userId) {
-        return new Response(null, {status: 401});
+        return new Response(null, {status: 200});
     }
 
     if (event.type === "checkout.session.completed") {
